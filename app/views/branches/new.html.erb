@@ -1,0 +1,18 @@
+<% content_for :title, "New Branch" %>
+
+<div class="max-w-4xl mx-auto py-10 px-6">
+
+  <div class="mb-6">
+    <h1 class="text-4xl font-bold text-gray-800">Create New Branch</h1>
+    <p class="text-gray-500 mt-1">Add a new church branch to the system.</p>
+  </div>
+
+  <%= render "form", branch: @branch %>
+
+  <div class="mt-6">
+    <%= link_to "Back to Branches",
+        branches_path,
+        class: "px-5 py-3 inline-block rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition" %>
+  </div>
+
+</div>

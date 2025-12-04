@@ -1,0 +1,85 @@
+<% content_for :title, "Branch Details" %>
+
+<div class="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    
+    <% if notice.present? %>
+      <div class="mb-6 bg-green-100 text-green-800 px-4 py-3 rounded-lg border border-green-200 shadow-sm">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-4xl font-extrabold text-gray-900">
+        <%= @branch.name %>
+      </h1>
+
+      <!-- ACTION BUTTONS (Only show to authorized users) -->
+      <% if can? :update, @branch %>
+        <div class="flex space-x-2">
+          <%= link_to edit_branch_path(@branch),
+              class: "inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition font-medium" do %>
+            ✏️ Edit
+          <% end %>
+
+          <% if can? :destroy, @branch %>
+            <%= button_to @branch, method: :delete, data: { turbo_confirm: "Are you sure you want to delete this branch?" },
+                class: "inline-flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-medium" do %>
+              🗑️ Delete
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white shadow-lg rounded-2xl border border-gray-100 p-8">
+      
+      <!-- Address -->
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold uppercase text-gray-500 tracking-wide">Address</h3>
+        <p class="mt-2 text-gray-800 text-lg leading-relaxed">
+          <%= @branch.address.presence || "Address not provided" %>
+        </p>
+      </div>
+
+      <!-- Status -->
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold uppercase text-gray-500 tracking-wide">Status</h3>
+        <span class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
+          <%= @branch.status == "Active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700" %>">
+          
+          <span class="w-2 h-2 mr-2 rounded-full 
+            <%= @branch.status == "Active" ? "bg-green-500" : "bg-gray-500" %> animate-pulse">
+          </span>
+
+          <%= @branch.status || "Active" %>
+        </span>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 gap-6 mt-8">
+        <div class="text-center p-4 bg-indigo-50 rounded-xl shadow-inner">
+          <p class="text-3xl font-bold text-indigo-600"><%= @branch.departments.count %></p>
+          <p class="text-sm text-gray-600 font-medium">Departments</p>
+        </div>
+        
+        <div class="text-center p-4 bg-purple-50 rounded-xl shadow-inner">
+          <p class="text-3xl font-bold text-purple-600"><%= @branch.users.count %></p>
+          <p class="text-sm text-gray-600 font-medium">Members</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-8 flex justify-start">
+      <%= link_to branches_path,
+          class: "inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium" do %>
+        ← Back to Branch List
+      <% end %>
+    </div>
+
+  </div>
+</div>

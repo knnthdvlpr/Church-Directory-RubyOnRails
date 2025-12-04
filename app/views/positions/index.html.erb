@@ -1,0 +1,155 @@
+<!-- app/views/positions/index.html.erb -->
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
+        Leadership <span class="text-purple-600">Positions</span>
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Explore the various roles and positions available within our church departments
+      </p>
+    </div>
+
+    <% if current_user&.has_role?(:admin) %>
+      <div class="flex justify-center mb-8">
+        <%= link_to new_position_path, class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transform transition hover:scale-105" do %>
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Add New Position
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Filter by Department -->
+    <div class="mb-8 flex justify-center">
+      <div class="bg-white rounded-xl shadow-lg p-4 inline-flex items-center space-x-4">
+        <label class="text-sm font-medium text-gray-700">Filter by Department:</label>
+        <select onchange="window.location.href='?department_id='+this.value" class="rounded-lg border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
+          <option value="">All Departments</option>
+          <% Department.all.each do |dept| %>
+            <option value="<%= dept.id %>" <%= 'selected' if params[:department_id] == dept.id.to_s %>><%= dept.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+
+    <!-- Positions Grid -->
+    <% if @positions.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% @positions.each do |position| %>
+          <div class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition duration-300 hover:-translate-y-2 overflow-hidden border border-gray-100">
+            <!-- Position Header -->
+            <div class="relative h-32 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 p-5">
+              <div class="absolute inset-0 bg-black opacity-10"></div>
+              <div class="relative z-10 h-full flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                  <div class="bg-white rounded-lg p-2 shadow-xl">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                  </div>
+                  <% if position.unique? %>
+                    <span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                      UNIQUE
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Position Content -->
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-[56px]">
+                <%= position.name %>
+              </h3>
+
+              <!-- Department Badge -->
+              <div class="mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  <%= position.department&.name %>
+                </span>
+              </div>
+
+              <!-- Branch Info -->
+              <div class="text-xs text-gray-500 mb-4 flex items-center">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <%= position.department&.branch&.name || 'No branch' %>
+              </div>
+
+              <!-- Stats -->
+              <div class="mb-4 p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg text-center">
+                <p class="text-2xl font-bold text-purple-600"><%= position.users.where(status: 'Active').count %></p>
+                <p class="text-xs text-gray-600 font-medium">
+                  <%= position.unique? ? 'Holder' : 'Members' %>
+                </p>
+              </div>
+
+              <!-- Availability Status -->
+              <% if position.unique? %>
+                <div class="mb-4">
+                  <% if position.available? %>
+                    <div class="flex items-center justify-center text-xs text-green-700 bg-green-50 rounded-lg py-2">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      Available
+                    </div>
+                  <% else %>
+                    <div class="flex items-center justify-center text-xs text-red-700 bg-red-50 rounded-lg py-2">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      Filled
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+
+              <!-- Action Buttons -->
+              <div class="flex space-x-2">
+                <%= link_to position, class: "flex-1 text-center px-3 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition font-medium text-xs" do %>
+                  View
+                <% end %>
+                
+                <% if current_user&.has_role?(:admin) %>
+                  <%= link_to edit_position_path(position), class: "px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition" do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  <% end %>
+                  
+                  <%= button_to position, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition" do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+</svg>
+<% end %>
+<% end %>
+</div>
+</div>
+</div>
+<% end %>
+</div>
+<% else %>
+<!-- Empty State -->
+<div class="text-center py-16">
+<svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+</svg>
+<h3 class="mt-6 text-xl font-medium text-gray-900">No positions yet</h3>
+<p class="mt-2 text-gray-500">Get started by creating your first position.</p>
+<% if current_user&.has_role?(:admin) %>
+<div class="mt-6">
+<%= link_to "Create Position", new_position_path, class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" %>
+</div>
+<% end %>
+</div>
+<% end %>
+  </div>
+</div>
