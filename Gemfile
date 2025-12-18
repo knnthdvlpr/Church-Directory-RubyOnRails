@@ -68,7 +68,7 @@ gem "devise", "~> 4.9"
 
 gem "rolify", "~> 6.0"
 
-gem "tailwindcss-rails", "~> 3.3.2"
+gem "tailwindcss-rails", "~> 4.4.0"
 
 gem "cancancan", "~> 3.6"
 
