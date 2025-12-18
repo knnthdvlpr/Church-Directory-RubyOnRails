@@ -1,7 +1,6 @@
 <!-- app/views/departments/_form.html.erb -->
-<div class="min-h-screen bg-gradient-to-br from-green-50 via-white to-teal-50 py-12">
   <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-    <%= form_with(model: department, class: "space-y-8") do |form| %>
+    <%= form_with(model: [@branch, department], class: "space-y-8") do |form| %>
       <% if department.errors.any? %>
         <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-6 shadow-lg">
           <div class="flex items-start">
@@ -47,17 +46,6 @@
             <%= form.text_field :name, class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition duration-200 text-gray-900 placeholder-gray-400", placeholder: "e.g., Music Department, Youth Ministry" %>
           </div>
 
-          <!-- Branch -->
-          <div class="group">
-            <%= form.label :branch_id, class: "flex items-center text-sm font-bold text-gray-700 mb-2" do %>
-              <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-              </svg>
-              Branch <span class="text-red-500 ml-1">*</span>
-            <% end %>
-            <%= form.collection_select :branch_id, Branch.all, :id, :name, { prompt: "Select a branch" }, class: "w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-green-500 focus:ring focus:ring-green-200 transition duration-200 text-gray-900" %>
-          </div>
-
           <!-- Description -->
           <div class="group">
             <%= form.label :description, class: "flex items-center text-sm font-bold text-gray-700 mb-2" do %>
@@ -70,10 +58,9 @@ Description
 </div>
 </div>    <!-- Form Actions -->
     <div class="bg-gray-50 px-8 py-6 flex justify-end space-x-4">
-      <%= link_to "Cancel", departments_path, class: "px-6 py-3 border-2 border-gray-300 rounded-xl shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transform transition hover:scale-105" %>
+      <%= link_to "Cancel", branch_departments_path(@branch), class: "px-6 py-3 border-2 border-gray-300 rounded-xl shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 transform transition hover:scale-105" %>
       <%= form.submit class: "px-6 py-3 border border-transparent rounded-xl shadow-lg text-base font-medium text-white bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 transform transition hover:scale-105 cursor-pointer" %>
     </div>
   </div>
 <% end %>
   </div>
-</div>

@@ -1,9 +1,12 @@
-# config/routes.rb
 Rails.application.routes.draw do
   devise_for :users
   
-  resources :branches
-  resources :departments
+  resources :branches do
+    scope module: :branches do
+      resources :departments
+    end
+  end
+  
   resources :positions
   
   resource :profile, only: [:show, :edit, :update]
@@ -28,5 +31,12 @@ Rails.application.routes.draw do
     resources :positions, only: [:index]
   end
 
+  if defined?(Importmap)
+    mount Importmap::Engine => "/rails/importmap"
+  end
+  
   root "branches#index"
+  
+  # Health check
+  get "up" => "rails/health#show", as: :rails_health_check
 end

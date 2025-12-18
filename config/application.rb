@@ -11,6 +11,12 @@ module ChurchDir
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
+    # Add this line if it's missing:
+    config.importmap.sweep_cache = true if Rails.env.development?
+    # Settings in config/environments/* take precedence over those specified here.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.

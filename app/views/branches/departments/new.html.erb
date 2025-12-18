@@ -1,0 +1,15 @@
+<% content_for :title, "New department" %>
+
+<div class="max-w-4xl mx-auto py-10 px-6">
+  <div class="mb-6">
+    <h1 class="text-4xl font-bold text-gray-800">Create New Department</h1>
+    <p class="text-gray-500 mt-1">Add a new department to the system.</p>
+  </div>
+
+  <%= render "form", department: @department %>
+   <div class="mt-6">
+    <%= link_to "Back to Departments",
+        branch_departments_path(@branch),
+        class: "px-5 py-3 inline-block rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition" %>
+  </div>
+</div>

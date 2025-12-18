@@ -409,7 +409,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9)
   image_processing (~> 1.2)
-  importmap-rails
+  importmap-rails (~> 2.2)
   jbuilder
   kamal
   pg (~> 1.1)
